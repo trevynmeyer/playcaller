@@ -46,13 +46,13 @@ foreach ($lines as $line) {
         $missing = $cells[7];
         #echo "---->".$missing."<-----";
         if (!$missing) {
-            echo "adding row $i\n";
+            #echo "adding row $i\n";
             if ($cells[4]) { $data['all_players'][] = $i-1; } else { echo "poo"; }
             if ($cells[4]) { $data['players'][] = array("name" => $cells[4], "line" => $cells[5], "skill" => $cells[6]);  }
             if ($cells[5]) { $data['line_players'][] = $cells[4]; }
             if ($cells[6]) { $data['skill_players'][] = $cells[4]; }
         } else {
-            echo "skipping row $i\n";
+            #echo "skipping row $i\n";
         }
     }
     #$cells7 = $cells[7];
