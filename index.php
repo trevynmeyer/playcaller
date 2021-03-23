@@ -12,6 +12,10 @@
   </head>
   <body>
 
+  <div class="container">
+
+    <p>Edit lists <a href="https://docs.google.com/spreadsheets/d/1uoEYbuYBpHDi4iPTNhf6Z1m-aSBWUo_MocINnfv2BzY">here</a></p>
+
 <?php
 $url = "https://docs.google.com/spreadsheets/d/1uoEYbuYBpHDi4iPTNhf6Z1m-aSBWUo_MocINnfv2BzY/export?format=csv";
 $content = file_get_contents($url);
@@ -117,14 +121,14 @@ $offense = array_rand($data['offense'],5);
 echo "<h5>Offensive Plays</h5>";
 echo "<ul>";
 foreach ($offense as $o) {
-    echo "</li>".$data['offense'][$o]."</li>";
+    echo "<li>".$data['offense'][$o]."</li>";
 }
 echo "</ul>";
 # CALL DEFENSE
 
 $defense = $data['defense'][array_rand($data['defense'],1)];
 echo "<h4>Defensive Play</h4>";
-echo "<pr>$defense</p>";
+echo "<p>$defense</p>";
 
 ?>
 
@@ -133,11 +137,7 @@ echo "<pr>$defense</p>";
 
 
 
-  <div class="container">
 
-    <h2>Offense></h2>
-    <ul>
-    
 </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
