@@ -24,7 +24,7 @@ $content = file_get_contents($url);
 $headers = array();
 $data = array();
 $lines = explode("\n",$content);
-
+#print_r($lines);
 $offense = array();
 $defense = array(); 
 $o_positions = array();
@@ -32,21 +32,27 @@ $d_positions =  array();
 $players = array();
 $i=0;
 foreach ($lines as $line) {
-    
+    $cells = null;
     $cells = explode(",",$line); 
     if ($i==0) {
         $headers = $cells;
     } else {
         #$data[] = $cells;
+        #print_r($cells);
         if ($cells[0]) { $data['offense'][] = $cells[0]; }
         if ($cells[1]) { $data['o_roles'][] = $cells[1]; }
         if ($cells[2]) { $data['defense'][] = $cells[2]; }
         if ($cells[3]) { $data['d_roles'][] = $cells[3]; }
-        if ($cells[7]!="x") {
+        $missing = $cells[7];
+        #echo "---->".$missing."<-----";
+        if (!$missing) {
+            echo "adding row $i\n";
             if ($cells[4]) { $data['all_players'][] = $i-1; } else { echo "poo"; }
             if ($cells[4]) { $data['players'][] = array("name" => $cells[4], "line" => $cells[5], "skill" => $cells[6]);  }
             if ($cells[5]) { $data['line_players'][] = $cells[4]; }
             if ($cells[6]) { $data['skill_players'][] = $cells[4]; }
+        } else {
+            echo "skipping row $i\n";
         }
     }
     #$cells7 = $cells[7];
@@ -54,8 +60,8 @@ foreach ($lines as $line) {
     $i++;
 }
 
-#print_r($data);
-#die();
+#print_r($data['players']);
+
 
 #BUILD THE OLINE
 
