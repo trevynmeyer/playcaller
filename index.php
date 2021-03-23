@@ -42,10 +42,10 @@ foreach ($lines as $line) {
         if ($cells[1]) { $data['o_roles'][] = $cells[1]; }
         if ($cells[2]) { $data['defense'][] = $cells[2]; }
         if ($cells[3]) { $data['d_roles'][] = $cells[3]; }
-        if ($cells[4]) { $data['all_players'][] = $i-1; }
-        if ($cells[4]) { $data['players'][] = array("name" => $cells[4], "line" => $cells[5], "skill" => $cells[6]);  }
-        if ($cells[5]) { $data['line_players'][] = $cells[4]; }
-        if ($cells[6]) { $data['skill_players'][] = $cells[4]; }
+        if ($cells[4] && !$cells[7]) { $data['all_players'][] = $i-1; }
+        if ($cells[4] && !$cells[7]) { $data['players'][] = array("name" => $cells[4], "line" => $cells[5], "skill" => $cells[6]);  }
+        if ($cells[5] && !$cells[7]) { $data['line_players'][] = $cells[4]; }
+        if ($cells[6] && !$cells[7]) { $data['skill_players'][] = $cells[4]; }
     }
     $i++;
 }
