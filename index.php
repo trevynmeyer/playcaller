@@ -68,7 +68,7 @@ echo "<ul>\n";
 $i = 0;
 foreach ($data['players'] as $pk => $player) {
     $i++;
-    #echo "<li>$i) $pk ".$player['name']."</li>\n";
+    echo "<li>$i) $pk ".$player['name']."</li>\n";
 }
 echo "</ul>\n";
 
