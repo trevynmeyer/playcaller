@@ -96,9 +96,11 @@ foreach ($o_line_players as $k => $pk) {
 #BUILD SKILL
 echo "<!-- All SKILL Players --->\n";
 #print_r($data['skill_players']);
-$remaining_players = array_diff($data['skill_players'], $o_line_players);
-
+$remaining_players = array_diff($data['skill_players'], $selected_line_players);
 echo "<!-- Remaining Skill after Line Selections --->\n";
+#print_r($remaining_players);
+
+
 #print_r($remaining_players);
 $o_skill_players = array_rand($remaining_players,6);
 echo "<!-- 6 Random Skill --->\n";
@@ -106,7 +108,6 @@ echo "<!-- 6 Random Skill --->\n";
 
 $selected_skill_players = array();
 foreach ($o_skill_players as $k => $pk) {
-    #echo "-$pk\n";
     $selected_skill_players[] = $remaining_players[$pk];
 }
 #print_r($selected_skill_players);
