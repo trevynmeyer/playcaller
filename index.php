@@ -30,6 +30,7 @@ $defense = array();
 $o_positions = array();
 $d_positions =  array();
 $players = array();
+$remaining_players = array();
 $i=0;
 foreach ($lines as $line) {
     $cells = null;
@@ -47,101 +48,188 @@ foreach ($lines as $line) {
         #echo "---->".$missing."<-----";
         if (!$missing) {
             #echo "adding row $i\n";
-            if ($cells[4]) { $data['all_players'][] = $i-1; } else { echo "poo"; }
-            if ($cells[4]) { $data['players'][] = array("name" => $cells[4], "line" => $cells[5], "skill" => $cells[6]);  }
-            if ($cells[5]) { $data['line_players'][] = $cells[4]; }
-            if ($cells[6]) { $data['skill_players'][] = $cells[4]; }
+            if ($cells[4]) { $data['all_players'][] = $i-1; }
+            if ($cells[4]) { $data['players'][$i-1] = array("name" => $cells[4], "line" => $cells[5], "skill" => $cells[6]);  }
+            if ($cells[5]) { $data['line_players'][] = $i-1; }
+            if ($cells[6]) { $data['skill_players'][] = $i-1; }
         } else {
-            #echo "skipping row $i\n";
+            if ($cells[4]) { $data['missing'][$i-1] = array("name" => $cells[4], "line" => $cells[5], "skill" => $cells[6]);  }
         }
     }
     #$cells7 = $cells[7];
     #echo "--->$cells7<---";
     $i++;
 }
-
+$all_players = $data['players'];
 #print_r($data['players']);
+
+echo "<h5>All non-missing Players</h5>\n";
+echo "<ul>\n";
+$i = 0;
+foreach ($data['players'] as $pk => $player) {
+    $i++;
+    #echo "<li>$i) $pk ".$player['name']."</li>\n";
+}
+echo "</ul>\n";
+
+
+
 
 
 #BUILD THE OLINE
+echo "<!-- ALL O LINE --->\n";
+#print_r($data['line_players']);
 
+echo "<!-- 5 Random O Line Player --->\n";
+$o_line_players = array();
 $o_line_players = array_rand($data['line_players'],5);
-$line_members = array();
-foreach ($o_line_players as $pk) {
-    $line_members[] = $pk;
+#print_r($o_line_players);
+
+$selected_line_players = array();
+foreach ($o_line_players as $k => $pk) {
+    #echo "-$pk\n";
+    $selected_line_players[] = $data['line_players'][$pk];
 }
+#print_r($selected_line_players);
+
 
 #BUILD SKILL
-
+echo "<!-- All SKILL Players --->\n";
+#print_r($data['skill_players']);
 $remaining_players = array_diff($data['skill_players'], $o_line_players);
+
+echo "<!-- Remaining Skill after Line Selections --->\n";
+#print_r($remaining_players);
 $o_skill_players = array_rand($remaining_players,6);
+echo "<!-- 6 Random Skill --->\n";
+#print_r($o_skill_players);
 
-$skill_members = array();
-
-foreach ($o_skill_players as $pk) {
-    $skill_members[] = $pk;
-
+$selected_skill_players = array();
+foreach ($o_skill_players as $k => $pk) {
+    #echo "-$pk\n";
+    $selected_skill_players[] = $remaining_players[$pk];
 }
+#print_r($selected_skill_players);
 
-shuffle($line_members);
-shuffle($skill_members);
+echo "<!-- FINAL LINE --->\n";
+#print_r($o_line_players);
 
-echo "<h5>Offense Players</h5>";
-echo "<ul>";
+echo "<!-- FINAL SKILL --->\n";
+#print_r($selected_skill_players);
+
+
+
+
+
+
+
+
+
+
+
+shuffle($selected_line_players);
+shuffle($selected_skill_players);
+
+
+
+
+
+
+
+
+
+
+
+
+
+echo "<!-- SUFFLED LINE --->\n";
+#print_r($selected_line_players);
+
+echo "<!-- SHUFFLED SKILL --->\n";
+#print_r($selected_skill_players);
+
+echo "<h5>Offense Players</h5>\n";
+echo "<ul>\n";
 
 $i=0;
 foreach ($data['o_roles'] as $role) {
     if ($i<=4) {
-        echo "<li>$role - ".$data['players'][$line_members[$i]]['name']."</li>";
+
+        echo "<li>$role - ".$data['players'][$selected_line_players[$i]]['name']."</li>\n";
     } else {
         $i2 = $i-5;
-        echo "<li>$role: - ".$data['players'][$skill_members[$i2]]['name']."</li>";
+        echo "<li>$role: - ".$data['players'][$selected_skill_players[$i2]]['name']."</li>\n";
     }
     $i++;
 }
-echo "</ul>";
+echo "</ul>\n";
 #find remaining players
 
-$remaining_players = array_diff($data['all_players'], $o_line_players);
-$remaining_players = array_diff($remaining_players, $o_skill_players);
+$remaining_players = array_diff($data['all_players'], $selected_line_players);
+#print_r($remaining_players);
+$remaining_players = array_diff($remaining_players, $selected_skill_players);
+#print_r($remaining_players);
 
 # BUILD DEFENSE 
-
+echo "<!-- select 11 defense playser --->\n";
 $d_players = array_rand($remaining_players,11);
-echo "<h5>Defense Players</h5>";
-echo "<ul>";
-shuffle($d_players);
+$selected_d_players = array();
+foreach ($d_players as $k => $pk) {
+    #echo "-$pk\n";
+    $selected_d_players[] = $remaining_players[$pk];
+}
+
+#print_r($selected_d_players);
+
+echo "<h5>Defense Players</h5>\n";
+echo "<ul>\n";
+shuffle($selected_d_players);
 $i=0;
 foreach ($data['d_roles'] as $role) {
-        echo "<li>$role - ".$data['players'][$d_players[$i]]['name']."</li>";
+        echo "<li>$role - ".$data['players'][$selected_d_players[$i]]['name']."</li>\n";
         $i++;
 }
-echo "</ul>";
+echo "</ul>\n";
 
 # SEE WHO is SITTING
 
-$remaining_players = array_diff($remaining_players, $d_players);
-echo "<h5>Sitting Players</h5>";
-echo "<ul>";
+$remaining_players = array_diff($remaining_players, $selected_d_players);
+
+#print_r($remaining_players);
+#print_r($all_players);
+echo "<h5>Sitting Players</h5>\n";
+echo "<ul>\n";
 foreach ($remaining_players as $pk) {
-    echo "<li>".$data['players'][$pk]['name']."</li>";
+    echo "<li>".$all_players[$pk]['name']."</li>\n";
 }
-echo "</ul>";
+echo "</ul>\n";
+
+# SEE WHO is MISSING
+#print_r($data['missing']);
+echo "<h5>Missing Players</h5>\n";
+echo "<ul>\n";
+$i =0;
+foreach ($data['missing'] as $m) {
+    $i++;
+    echo "<li>$i) ".$m['name']."</li>\n";
+}
+echo "</ul>\n";
+
 #CALL OFFENSE
 
 $offense = array_rand($data['offense'],5);
 
-echo "<h5>Offensive Plays</h5>";
-echo "<ul>";
+echo "<h5>Offensive Plays</h5>\n";
+echo "<ul>\n";
 foreach ($offense as $o) {
-    echo "<li>".$data['offense'][$o]."</li>";
+    echo "<li>".$data['offense'][$o]."</li>\n";
 }
-echo "</ul>";
+echo "</ul>\n";
 # CALL DEFENSE
 
 $defense = $data['defense'][array_rand($data['defense'],1)];
-echo "<h4>Defensive Play</h4>";
-echo "<p>$defense</p>";
+echo "<h4>Defensive Play</h4>\n";
+echo "<p>$defense</p>\n";
 
 ?>
 
